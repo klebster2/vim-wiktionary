@@ -31,20 +31,19 @@ request_url_options = "?redirect=true"
 word_defs=[]
 response = requests.get(request_base_url + vim.eval('cursorWord') + request_url_options, headers=request_headers)
 
-if (response.status_code != 200):
-    print(str(response.status_code) + ": " + response.reason)
-    return
+if not (response.status_code != 200):
 
-definition_json = json.loads(response.text)
+    definition_json = json.loads(response.text)
 
-for definition_item in definition_json["en"]:
-    pos=definition_item["partOfSpeech"]
+    for definition_item in definition_json["en"]:
+        pos=definition_item["partOfSpeech"]
 
-    for definition in definition_item["definitions"]:
-        definitions.append(re.sub(html_tag_pattern, "", definition["definition"]))
+        for definition in definition_item["definitions"]:
+            definitions.append(re.sub(html_tag_pattern, "", definition["definition"]))
 
-    word_defs.append({"pos": definitions})
-vim.command("let sWikiDefinitionJson = '%s'" % json.dumps(s))
+        word_defs.append({"pos": definitions})
+
+    vim.command("let sWikiDefinitionJson = '%s'" % json.dumps(word_defs))
 EOF
 
     let l:data = json_decode(join(sWikiDefinitionJson))
