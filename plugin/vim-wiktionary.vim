@@ -26,8 +26,6 @@ request_url_options = "?redirect=true"
 # Fetches available definitions for a given word.
 def get_word_definitions(word_to_define):
     response = requests.get(request_base_url + word_to_define + request_url_options, headers=request_headers)
-    import pdb
-    pdb.set_trace()
 
     if (response.status_code != 200):
         print(str(response.status_code) + ": " + response.reason)
@@ -51,3 +49,4 @@ endfunction
 
 " Exposes the plugin's functions for use as commands in Vim.
 command! -nargs=0 WikiDefineWord call s:WikiDefineWord()
+expose
