@@ -28,7 +28,7 @@ request_url_options = "?redirect=true"
 
 # Fetches available definitions for a given word.
 word_defs=[]
-response = requests.get(request_base_url + vim.eval("""expand("'<cword>'")""") + request_url_options, headers=request_headers)
+response = requests.get(request_base_url + vim.eval("expand('<cword>')") + request_url_options, headers=request_headers)
 
 if not (response.status_code != 200):
 
