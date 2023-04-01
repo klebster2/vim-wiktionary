@@ -43,10 +43,10 @@ if not (response.status_code != 200):
 
         word_defs.append({"pos": definitions})
 
-    vim.command("let sWikiDefinitionJson = '%s'" % json.dumps(word_defs))
+    vim.command("let l:sWikiDefinitionJson = '%s'" % json.dumps(word_defs))
 EOF
 
-    let l:data = json_decode(join(sWikiDefinitionJson))
+    let l:data = json_decode(join(l:sWikiDefinitionJson))
     for m in l:data
     "
     " Check if it matches what we're trying to complete; in this case we
