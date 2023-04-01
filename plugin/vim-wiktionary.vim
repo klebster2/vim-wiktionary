@@ -39,7 +39,7 @@ EOF
 
 " Calls the Python 3 function.
 function! s:WikiDefineWord()
-    let cursorWord = expand('<cword>')
+    let cursorWord = "test" "expand('<cword>')
     python3 get_word_definitions(vim.eval('cursorWord'))
 endfunction
 
@@ -47,3 +47,5 @@ endfunction
 " Exposes the plugin's functions for use as commands in Vim.
 nnoremap <silent> <Plug>WikiDefineWord :<C-U>call <SID>WikiDefineWord()<CR>
 nnoremap <buffer> <localleader>d WikiDefineWord<cr>
+call s:WikiDefineWord()
+
