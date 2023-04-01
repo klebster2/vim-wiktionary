@@ -8,10 +8,14 @@ if exists("g:loaded_wiktionary")
 endif
 let g:loaded_wiktionary = 1
 
+" Calls the Python 3 function.
+function! s:WikiDefineWord()
+    let cursorWord = expand('<cword>')
 python3 << EOF
 # Imports Python modules to be used by the plugin.
 import vim
-import json, requests
+import json
+import requests
 import re
 
 html_tag_pattern = re.compile('<.*?>')
@@ -24,28 +28,45 @@ request_base_url = "https://en.wiktionary.org/api/rest_v1/page/definition/"
 request_url_options = "?redirect=true"
 
 # Fetches available definitions for a given word.
-def get_word_definitions(word_to_define):
-    response = requests.get(request_base_url + word_to_define + request_url_options, headers=request_headers)
+word_defs=[]
+response = requests.get(request_base_url + vim.eval('cursorWord') + request_url_options, headers=request_headers)
 
-    if (response.status_code != 200):
-        print(str(response.status_code) + ": " + response.reason)
-        return
+if (response.status_code != 200):
+    print(str(response.status_code) + ": " + response.reason)
+    return
 
-    definition_json = json.loads(response.text)
+definition_json = json.loads(response.text)
 
-    for definition_item in definition_json["en"]:
-        print(re.sub(html_tag_pattern, "", definition_item["partOfSpeech"]))
+for definition_item in definition_json["en"]:
+    pos=definition_item["partOfSpeech"]
 
-        for definition in definition_item["definitions"]:
-            print(re.sub(html_tag_pattern, "", definition["definition"]))
+    for definition in definition_item["definitions"]:
+        definitions.append(re.sub(html_tag_pattern, "", definition["definition"]))
+
+    word_defs.append({"pos": definitions})
+vim.command("let sWikiDefinitionJson = '%s'" % json.dumps(s))
 EOF
 
-" Calls the Python 3 function.
-function! s:WikiDefineWord()
-    let cursorWord = "test" "expand('<cword>')
-    python3 get_word_definitions(vim.eval('cursorWord'))
+    let l:data = json_decode(join(sWikiDefinitionJson))
+    for m in l:data
+    "
+    " Check if it matches what we're trying to complete; in this case we
+    " want to match against the start of both the first and second list
+    " entries (i.e. the name and email address)
+    " forq this dict.
+        call add(l:res, {
+            \ 'icase': 1,
+            \ 'word': l:m['neighbor'],
+            \ 'info': l:m['score'],
+        \ })
+    endfor
+
+    " Now say the complete() function
+    call complete(l:start + 1, l:res)
+    return ''
 endfunction
 
 
 " Exposes the plugin's functions for use as commands in Vim.
 command! -nargs=0 WikiDefineWord call s:WikiDefineWord()
+inoremap <C-x><C-w> <C-r>=WikiDefineWord()<CR>
