@@ -49,4 +49,3 @@ endfunction
 
 " Exposes the plugin's functions for use as commands in Vim.
 command! -nargs=0 WikiDefineWord call s:WikiDefineWord()
-expose
