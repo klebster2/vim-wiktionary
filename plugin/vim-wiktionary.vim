@@ -3,6 +3,11 @@
 " Last Change:  1 April 2023
 " Maintainer:   klebster2 <https://github.com/klebster2>
 
+if exists("g:loaded_wiktionary")
+    finish
+endif
+let g:loaded_wiktionary = 1
+
 python3 << EOF
 # Imports Python modules to be used by the plugin.
 import vim
@@ -33,17 +38,12 @@ def get_word_definitions(word_to_define):
 EOF
 
 " Calls the Python 3 function.
-function! wiktionary#DefineWord()
+function! s:WikiDefineWord()
     let cursorWord = expand('<cword>')
     python3 get_word_definitions(vim.eval('cursorWord'))
 endfunction
 
-if exists("g:loaded_wiktionary")
-    finish
-endif
-let g:loaded_wiktionary = 1
 
 " Exposes the plugin's functions for use as commands in Vim.
-nnoremap <silent> <Plug>DefineWord :<C-U>call <SID>DefineWord()<CR>
-
-nnoremap <buffer> <localleader>d DefineWord<cr>
+nnoremap <silent> <Plug>WikiDefineWord :<C-U>call <SID>WikiDefineWord()<CR>
+nnoremap <buffer> <localleader>d WikiDefineWord<cr>
