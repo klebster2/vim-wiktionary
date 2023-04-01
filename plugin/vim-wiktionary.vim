@@ -1,5 +1,5 @@
-" Title:        Vim For Poets
-" Description:  A plugin to help users Define, use, and research words.
+" Title:        Vim Wiktionary
+" Description:  A plugin to help users Define, Use, and Research words.
 " Last Change:  1 April 2023
 " Maintainer:   klebster2 <https://github.com/klebster2>
 
