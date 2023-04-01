@@ -11,7 +11,7 @@ let g:loaded_wiktionary = 1
 " Calls the Python 3 function.
 function! s:WikiDefineWord()
     let cursorWord = expand('<cword>')
-python3 << EOF
+python3 << endPython
 # Imports Python modules to be used by the plugin.
 import vim
 import json
@@ -42,11 +42,10 @@ if not (response.status_code != 200):
             definitions.append(re.sub(html_tag_pattern, "", definition["definition"]))
 
         word_defs.append({"pos": definitions})
+endPython
+    let l:word_defs = pyeval('word_defs')
 
-    vim.command("let l:sWikiDefinitionJson = '%s'" % json.dumps(word_defs))
-EOF
-
-    let l:data = json_decode(join(l:sWikiDefinitionJson))
+    let l:data = json_decode(join(l:word_defs))
     for m in l:data
     "
     " Check if it matches what we're trying to complete; in this case we
