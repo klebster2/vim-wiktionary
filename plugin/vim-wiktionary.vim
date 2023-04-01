@@ -9,7 +9,7 @@ endif
 let g:loaded_wiktionary = 1
 
 " Calls the Python 3 function.
-function! s:WikiDefineWord()
+function! WikiDefineWord()
     let cursorWord = expand('<cword>')
 python3 << EOF
 # Imports Python modules to be used by the plugin.
@@ -67,5 +67,4 @@ endfunction
 
 
 " Exposes the plugin's functions for use as commands in Vim.
-command! -nargs=0 WikiDefineWord call s:WikiDefineWord()
-inoremap <C-x><C-w> <C-r>=WikiDefineWord()<CR>
+inoremap <silent> <Plug>WikiDefineWord <c-o>:call WikiDefineWord()<cr>
