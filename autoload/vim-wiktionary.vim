@@ -28,7 +28,7 @@ def get_word_definitions(word_to_define):
 EOF
 
 " Calls the Python 3 function.
-function! vim-for-poets#DefineWord()
+function! wiktionary#DefineWord()
     let cursorWord = expand('<cword>')
     python3 get_word_definitions(vim.eval('cursorWord'))
 endfunction
