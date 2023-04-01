@@ -9,7 +9,7 @@ endif
 let g:loaded_wiktionary = 1
 
 " Calls the Python 3 function.
-function! s:WikiDefineWord()
+function! WikiDefineWord()
 python3 << endPython
 # Imports Python modules to be used by the plugin.
 import vim
@@ -42,6 +42,7 @@ if not (response.status_code != 200):
 
         word_defs.append({"pos": definitions})
 endPython
+
     let l:word_defs = pyeval('word_defs')
 
     let l:data = json_decode(join(l:word_defs))
@@ -68,3 +69,4 @@ inoremap <silent> <Plug>WikiDefineWord <C-R>=<SID>WikiDefineWord()<CR>
 if !exists("g:wiktionary_no_mappings") || ! g:wiktionary_no_mappings
   imap <C-x><C-w> <Plug>WikiDefineWord
 endif
+" hello
