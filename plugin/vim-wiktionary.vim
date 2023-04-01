@@ -65,6 +65,5 @@ EOF
     return ''
 endfunction
 
-
 " Exposes the plugin's functions for use as commands in Vim.
-inoremap <silent> <Plug>WikiDefineWord <c-o>:call WikiDefineWord()<cr>
+inoremap <silent> <Plug>WikiDefineWord <C-R>=<SID>WikiDefineWord()<CR>
