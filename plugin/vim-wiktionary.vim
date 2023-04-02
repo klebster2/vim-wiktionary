@@ -34,14 +34,12 @@ word_defs=[]
 
 line=vim.eval("l:line")
 idx=int(vim.eval("l:col"))
-#vim.command(f"echom {line}")
 
-while line[idx-1] in "A-Za-z0-9-":
+while line[idx-1] in "A-Za-z0-9":
     idx-=1
 
-#vim.command(f"echom {line[idx:-1]}")
+vim.command("echom {}".format(line[idx:-1]))
 response = requests.get(request_base_url + line[idx:-1] + request_url_options, headers=request_headers)
-
 
 if not (response.status_code != 200):
 
