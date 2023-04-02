@@ -9,7 +9,7 @@ endif
 let g:loaded_wiktionary = 1
 
 " Calls the Python 3 function.
-function! WikiDefineWord()
+function! s:WikiDefineWord()
     let l:cursorWord = expand('<cword>')
 python3 << endPython
 # Imports Python modules to be used by the plugin.
