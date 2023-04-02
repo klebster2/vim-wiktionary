@@ -32,9 +32,9 @@ request_url_options = "?redirect=true"
 # Fetches available definitions for a given word.
 word_defs=[]
 
-vim.command(f"echom {line}")
 line=vim.eval("l:line")
 idx=int(vim.eval("l:col"))
+vim.command(f"echom {line}")
 while line[idx-1] in "A-Za-z0-9-":
     idx-=1
 
