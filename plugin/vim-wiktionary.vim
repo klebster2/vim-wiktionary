@@ -10,7 +10,9 @@ let g:loaded_wiktionary = 1
 
 " Calls the Python 3 function.
 function! s:WikiDefineWord()
-    let l:cursorWord = expand('<cword>')
+    let l:col = col('.')
+    let l:line = getline('.')
+
 python3 << endPython
 # Imports Python modules to be used by the plugin.
 import vim
@@ -29,7 +31,16 @@ request_url_options = "?redirect=true"
 
 # Fetches available definitions for a given word.
 word_defs=[]
-response = requests.get(request_base_url + vim.command("""expand("'<"cword">'")""") + request_url_options, headers=request_headers)
+
+vim.command(f"echom {line}")
+line=vim.eval("l:line")
+idx=int(vim.eval("l:col"))
+while line[idx-1] in "A-Za-z0-9-":
+    idx-=1
+
+vim.command(f"echom {line[idx:-1]}")
+response = requests.get(request_base_url + line[idx:-1] + request_url_options, headers=request_headers)
+
 
 if not (response.status_code != 200):
 
