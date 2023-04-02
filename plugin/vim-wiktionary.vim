@@ -34,7 +34,8 @@ word_defs=[]
 
 line=vim.eval("l:line")
 idx=int(vim.eval("l:col"))
-vim.command(f"echom {line}")
+#vim.command(f"echom {line}")
+
 while line[idx-1] in "A-Za-z0-9-":
     idx-=1
 
