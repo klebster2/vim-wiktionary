@@ -31,24 +31,45 @@ class VimWiktionaryPlugin(object):
         cword = self.nvim.eval("expand('<cword>')")
         assert isinstance(cword, str)
         word_wiktionary = parser.fetch(cword)
+        #word_wiktionary_new = word_wiktionary
+        word_wiktionary_new = []
+        for word in word_wiktionary:
+            word_new = []
+            definitions = []
+            for definition in word["definitions"]:
+                if definition.get("relatedWords"):
+                    related_words_new = []
+                    for related_word in definition["relatedWords"]:
+                        related_word_new = related_word
+                        related_word_new.update({"words":', '.join(related_word["words"])})
+                        related_words_new.append(related_word)
+                    definition.update({"relatedWords": related_words_new})
+                definitions.append(definition)
+            word_new = word
+            word_new.update({"definitions":definitions})
+            word_wiktionary_new.append(word_new)
+
 
         word_wiktionary_yaml = yaml.safe_dump(
-            word_wiktionary, allow_unicode=True, width=4096
+            {cword: word_wiktionary_new}, allow_unicode=True, width=4096
         )
 
         # remove quotes (they are often inconsistent)
-        word_wiktionary_yaml_noquotes_nonl = (
-            word_wiktionary_yaml.replace("'", "").replace('"', "").replace("\n\n", "\n")
+        word_wiktionary_yaml_noquotes_nonl_clean = (
+            word_wiktionary_yaml\
+            .replace("'", "")\
+            .replace('"', "")\
+            .replace("\n\n", "\n")\
+            .replace("...","…")
         )
         self.nvim.command("new")
         self.nvim.command("set syntax=yaml")
         self.nvim.command("set wrap")
-        self.nvim.command("set ma")
+        self.nvim.command("set nonumber norelativenumber")
+        self.nvim.command("set nolist wrap linebreak breakat&vim")
+        self.nvim.command("setlocal foldmethod=indent")
         self.nvim.current.buffer[:] = [
             l
-            for l in word_wiktionary_yaml_noquotes_nonl.split("\n")
+            for l in word_wiktionary_yaml_noquotes_nonl_clean.split("\n")
             if isinstance(l, str)
         ]
-        self.nvim.command("set ro")
-        self.nvim.command("set noma")
-        self.nvim.command("nnoremap <silent> q q!")
