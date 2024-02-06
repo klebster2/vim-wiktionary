@@ -1,14 +1,14 @@
 # Title:        Vim Wiktionary
 # Description:  A plugin to help users Define, Use, and Research words.
-# Last Change:  12 April 2023
+# Last Change:  6th February 2024
 # Maintainer:   klebster2 <https://github.com/klebster2>
 # Imports Python modules to be used by the plugin.
 import subprocess
 import sys
-import json
+import typing as t
 
 
-def install(package):
+def install(package: str):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
@@ -27,7 +27,7 @@ except:
     import yaml
 
 try:
-    import vim
+    import vim  # type:ignore
 except Exception as e:
     print(e)
     print("No vim module available outside vim")
@@ -36,18 +36,25 @@ except Exception as e:
 # Change this if you want to use a different language
 DEFAULT_LANGUAGE = "english"
 
+# Change this if you want to include more / different keys
+DEFAULT_KEYS = "definitions,pronunciations,etymology"
 
-def wiktionary_parse():
+
+def wiktionary_parse(
+    language: t.Optional[str] = DEFAULT_LANGUAGE, keep_keys: str = DEFAULT_KEYS
+) -> None:
     """
-    Idea
-    Keep it simple, just create a new window that has the word defs / ety
-    scraped from wiktionary
+    Description
+    -----------
+    Return information to vim about the word definitions / etymologies / pronunciations
     """
     parser = WiktionaryParser()
     # TODO: fix this when the user wants to use a different language
-    parser.set_default_language(DEFAULT_LANGUAGE)
+    parser.set_default_language(
+        language
+    )
 
-    cword = vim.eval("expand('<cword>')")
+    cword = vim.eval("expand('<cword>')")  # type:ignore
     # strip and clean the word
     cword = cword.strip()
     assert isinstance(cword, str)
@@ -58,7 +65,10 @@ def wiktionary_parse():
     for word in word_wiktionary:
         definitions = []
         word_new = {}
-        for key in ("definitions", "pronunciations", "etymology"):
+        # TODO: add more keys / parsing rules / options
+        # and decide whether to limit the number of items returned
+        for key in keep_keys.split(","):
+
             if key == "definitions":
                 for definition in word["definitions"]:
                     if definition.get("relatedWords"):
@@ -72,8 +82,10 @@ def wiktionary_parse():
                         definition.update({"relatedWords": related_words_new})
                     definitions.append(definition)
                 word_new.update({"definitions": definitions})
+
             elif key == "pronunciations":
-               word_new.update({"pronunciations": word["pronunciations"]})
+                word_new.update({"pronunciations": word["pronunciations"]})
+
             elif key == "etymology":
                 word_new.update({"etymology": word["etymology"]})
 
@@ -86,11 +98,16 @@ def wiktionary_parse():
     # Attempt a simple text cleanup.
     # Remove quotes (they are often inconsistent and they add highlighting that make
     # the entries more difficult to read)
-
+    # TODO: understand if we can highlight syntax ( e.g. bold, italic, etc)
+    #       and also highlight the cword itself
     word_wiktionary_yaml_noquotes_nonl_clean = (
         word_wiktionary_yaml.replace("'", "")
         .replace('"', "")
         .replace("\n\n", "\n")
         .replace("...", "…")
     )
-    [vim.command('echom "%s"' % line) for line in word_wiktionary_yaml_noquotes_nonl_clean.split("\n")]  #type:ignore
+    vim.command("echom")  # type:ignore
+    [
+        vim.command('echom "%s"' % line)  # type:ignore
+        for line in word_wiktionary_yaml_noquotes_nonl_clean.split("\n")
+    ]

@@ -22,8 +22,10 @@ EOF
 
 let g:vim_wiktionary_python_plugin_loaded = 1
 
-function! WiktionaryEtymology()
-  python3 plugin.wiktionary_parse()
+" add language, and comma separated keep keys arg
+
+function! Wiktionary(args)
+  python3 plugin.wiktionary_parse(a:args[0], a:args[1])
 endfunction
 
-command! -nargs=0 WiktionaryEtymology call WiktionaryEtymology()
+command! -nargs=1 Wiktionary call Wiktionary(<f-args>)
