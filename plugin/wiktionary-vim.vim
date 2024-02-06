@@ -59,6 +59,7 @@ def wiktionary_parse():
     for word in word_wiktionary:
         definitions = []
         word_new = {}
+        print(word)
         for key in ("definitions", "pronunciations", "etymology"):
             if key == "definitions":
                 for definition in word["definitions"]:
@@ -73,6 +74,7 @@ def wiktionary_parse():
                         definition.update({"relatedWords": related_words_new})
                     definitions.append(definition)
                 word_new.update({"definitions": definitions})
+                print(definitions)
             #elif key == "pronunciations":
             #    word_new.update({"pronunciations": word["pronunciations"]})
             elif key == "etymology":
