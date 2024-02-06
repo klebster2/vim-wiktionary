@@ -34,7 +34,7 @@ except Exception as e:
     pass
 
 # Change this if you want to use a different language
-DEFAULT_LANGUAGE = "en"
+DEFAULT_LANGUAGE = "english"
 
 
 def wiktionary_parse():
@@ -48,6 +48,9 @@ def wiktionary_parse():
     parser.set_default_language(DEFAULT_LANGUAGE)
 
     cword = vim.eval("expand('<cword>')")
+    vim.command('echo "cword: %s"' % cword)
+    # strip and clean the word
+    cword = cword.strip()
     assert isinstance(cword, str)
 
     word_wiktionary = parser.fetch(cword)
