@@ -13,7 +13,7 @@ python3 << EOF
 import subprocess
 
 def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package, "yaml"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 try:
     from wiktionaryparser import WiktionaryParser
@@ -120,7 +120,7 @@ EOF
 let g:vim_wiktionary_python_plugin_loaded = 1
 
 function! WiktionaryEtymology()
-  python3 plugin.wiktionary_parse()
+  python3 wiktionary_parse()
 endfunction
 
 command! -nargs=0 WiktionaryEtymology call WiktionaryEtymology()
