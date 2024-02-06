@@ -5,18 +5,10 @@
 # Imports Python modules to be used by the plugin.
 import subprocess
 import sys
-import typing as t
-
-# Change this if you want to use a different language
-DEFAULT_LANGUAGE = "english"
-
-# Change this if you want to include more / different keys
-DEFAULT_KEYS = "definitions,pronunciations,etymology"
 
 
 def install(package: str):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
 
 try:
     from wiktionaryparser import WiktionaryParser
@@ -50,8 +42,6 @@ def wiktionary_parse() -> None:
     # TODO: fix this when the user wants to use a different language
     wiktionary_parser.set_default_language(
         vim.eval("g:wiktionary_language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
-        if vim.eval("g:wiktionary_language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
-        else DEFAULT_LANGUAGE
     )
 
     cword = vim.eval("expand('<cword>')")  # type:ignore
@@ -92,12 +82,9 @@ def wiktionary_parse() -> None:
     word_wiktionary_yaml = yaml.safe_dump(
         {cword: word_wiktionary_new}, allow_unicode=True, width=4096
     )
-
-    # Attempt a simple text cleanup.
-    # Remove quotes (they are often inconsistent and they add highlighting that make
-    # the entries more difficult to read)
-    # TODO: understand if we can highlight syntax ( e.g. bold, italic, etc)
-    #       and also highlight the cword itself
+    # Attempt a simple text cleanup: remove the (often inconsistent) quotes, which add highlighting, 
+    # makin the entries more difficult to read)
+    # TODO: understand if syntax highlighting is possible, e.g. bold, italic, etc. and also highlight the `<cword>` itself
     word_wiktionary_yaml_noquotes_nonl_clean = (
         word_wiktionary_yaml.replace("'", "")
         .replace('"', "")

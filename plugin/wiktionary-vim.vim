@@ -9,10 +9,6 @@ endif
 
 let s:plugin_root_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
-let g:wiktionary_language = 'english'
-let g:wiktionary_keep_keys = 'definitions,pronunciations,etymology'
-
-
 python3 << EOF
 import sys
 from os.path import normpath, join
