@@ -2,7 +2,7 @@
 
 ## Description
 
-Aim: Deliver Wiktionary within Vim so that users can look up etymologies, word definitions, and pronunciations, etc.
+Deliver Wiktionary within Vim so that users can look up etymologies, word definitions, and pronunciations, etc.
 
 ## How to use
 
