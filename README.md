@@ -12,9 +12,9 @@ Aim: Deliver Wiktionary within Vim (to look up etymologies, word definitions, an
 python -m pip install wiktionaryparser PyYAML
 ```
 
-Note - I still need to figure out exactly what this translates to in terms of packer, plug, etc.
+Note that it remains to be figured out exactly what this translates to in terms of a subcommand for packer, plug, etc.
 
-(do not worry if you _don't_ do this, as the script is configured to run a subprocess to install those packages if you don't)
+Also, do not worry if you _don't_ do this, as the script is configured to run a subprocess to install those packages if you don't.
 
 2. Next run: `:WiktionaryParser` which will attempt to send the `<cword>` to Wiktionary.
 
@@ -87,7 +87,8 @@ Simply open an Issue or a Pull Request.
 
 # TODO:
 
-Customize user language
-Customize parsing options e.g. definitions, pronunciations, etymology.
-Make output kinder (there are some fields that are absolutely massive)
-Add color to words of interest / color code keys using simple YAML parser
+* Make the options more fine grained in terms of definitions, pronunciations, and etymology.
+** Make output kinder (there are some fields that are absolutely massive)
+* Add custom vim keymap examples.
+* Consider passing Args directly to the Wiktionary function.
+* Consider adding color to words of interest / color code keys using simple YAML parser / syntax highlighter.
