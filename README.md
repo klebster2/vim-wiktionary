@@ -2,7 +2,7 @@
 
 ## Description
 
-Use Wiktionary within Vim (To look up etymologies, word definitions, and pronunciations, etc.)
+Aim: Deliver Wiktionary within Vim (to look up etymologies, word definitions, and pronunciations, etc.)
 
 ## How to use
 
@@ -26,58 +26,68 @@ Currently, a new window is brought up with a `YAML` format of the Wiktionary que
 
 After installing using Plug, or Packer, or your default vim package manager, run one of the following:
 
-## Vimscript command (Classic Vim)
-
-E.g. Setting the language to Portuguese
+## Vim Command (VimScript)
 
 ```vim
-let g:wiktionary_language = 'portuguese'
+let g:wiktionary_language = 'german'
 ```
 
-## Neovim command
+You can add the following to your vimrc, init.vim or init.lua file:
 
-```
-lua vim.api.nvim_exec([[ let g:wiktionary_language = 'portuguese' ]], true)
-```
-
-hence you could set the following somewhere
+## Neovim Command (Lua)
 
 ```lua
-vim.api.nvim_exec([[ let g:wiktionary_language = 'portuguese' ]], true)
+vim.g.wiktionary_keep_keys = 'etymology'
+vim.g.wiktionary_language = 'french'
 ```
 
-# Setting the Keys returned from wiktionary
+Then when running, you should be able to get etymology for French language words:
 
-Wiktionary can return a lot of data for a single word.
-It is for this reason that limiting the keys returned can be a good idea.
-
-## Vimscript command (Classic Vim)
-
-```vim
-let g:wiktionary_keys = 'etymology,pronunciations'
-let g:wiktionary_keys = 'etymology'
-" etc
-```
-
-## Neovim Command
+E.g. running the below for “bonjour”:
 
 ```
-lua vim.api.nvim_exec([[ let g:wiktionary_keys = 'etymology' ]], true)
+:Wiktionary
 ```
 
-Since a user may be utilizing wiktionary for a specific purpose, one can set the keys like the following
+Should yield something like:
+
+```text
+bonjour:
+- etymology: Inherited from Middle French bonjour, from Old French bon jor (literally “good day”). By surface analysis, bon (“good”) +<200e> jour (“day”).
+```
+
+## Setup with packer
+
+You can also setup directly from within packer:
 
 ```lua
-vim.api.nvim_exec([[ let g:wiktionary_keys = 'etymology' ]], true)
+local use = require("packer").use
+require("packer").startup(function()
+    use {
+      "klebster2/vim-wiktionary",
+        config = function()
+          vim.g.wiktionary_language = 'english'
+          vim.g.wiktionary_keep_keys = 'etymology,definitions'
+        end
+    }
+end)
 ```
+
+## Setup with Plug
+
+TODO
+
+## Setup with Vundle
+
+TODO
 
 # Contributing
 
-Simply open an Issue or a Pull Request
+Simply open an Issue or a Pull Request.
 
 # TODO:
 
 Customize user language
-Customize parsing options e.g. definitions, pronunciations, etymology
+Customize parsing options e.g. definitions, pronunciations, etymology.
+Make output kinder (there are some fields that are absolutely massive)
 Add color to words of interest / color code keys using simple YAML parser
-
