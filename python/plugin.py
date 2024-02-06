@@ -5,10 +5,11 @@
 # Imports Python modules to be used by the plugin.
 import subprocess
 import sys
+import json
 
 
 def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package, "yaml"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 
 try:
@@ -56,7 +57,6 @@ def wiktionary_parse():
     for word in word_wiktionary:
         definitions = []
         word_new = {}
-        import json
         vim.command(f'echo "{json.dumps(word)}"')
         for key in ("definitions", "pronunciations", "etymology"):
             if key == "definitions":
@@ -78,6 +78,7 @@ def wiktionary_parse():
                 word_new.update({"etymology": word["etymology"]})
 
         word_wiktionary_new.append(word_new)
+    print(word_wiktionary_new)
 
     word_wiktionary_yaml = yaml.safe_dump(
         {cword: word_wiktionary_new}, allow_unicode=True, width=4096
@@ -96,7 +97,7 @@ def wiktionary_parse():
     #vim.command(  # type: ignore
     #    "setlocal wrap nonumber norelativenumber nolist wrap linebreak breakat&vim noswapfile bufhidden=hide buftype=nofile foldmethod=indent syntax=yaml"
     #)
-    vim.command('echo "%s"' % word_wiktionary_yaml_noquotes_nonl_clean)
+    vim.command('echom "%s"' % word_wiktionary_yaml_noquotes_nonl_clean)
     word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit = (
         word_wiktionary_yaml_noquotes_nonl_clean.split("\n")
     )
