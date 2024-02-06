@@ -25,8 +25,8 @@ except:
 try:
     import yaml
 except:
-    print("Trying to install package: yaml")
-    install('yaml')
+    print("Trying to install package: PyYAML")
+    install('PyYAML')
     import yaml
 
 try:
