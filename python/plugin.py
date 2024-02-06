@@ -49,8 +49,8 @@ def wiktionary_parse() -> None:
     wiktionary_parser = WiktionaryParser()
     # TODO: fix this when the user wants to use a different language
     wiktionary_parser.set_default_language(
-        vim.eval("a:language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
-        if vim.eval("a:language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
+        vim.eval("g:wiktionary_language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
+        if vim.eval("g:wiktionary_language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
         else DEFAULT_LANGUAGE
     )
 
@@ -65,7 +65,7 @@ def wiktionary_parse() -> None:
         word_new = {}
         # TODO: add more keys / parsing rules / options
         # and decide whether to limit the number of items returned
-        for key in vim.eval("a:keep_keys").split(","):  # type:ignore
+        for key in vim.eval("g:wiktionary_keep_keys").split(","):  # type:ignore
 
             if key == "definitions":
                 for definition in word["definitions"]:

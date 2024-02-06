@@ -10,15 +10,9 @@ endif
 let s:plugin_root_dir = fnamemodify(resolve(expand('<sfile>:p')), ':h')
 
 let g:wiktionary_language = 'english'
-let g:wiktionary_keys = 'definitions,pronunciations,etymology'
+let g:wiktionary_keep_keys = 'definitions,pronunciations,etymology'
 
-let g:vim_wiktionary_python_plugin_loaded = 1
 
-function! Wiktionary()
-  " add language, and comma separated keep keys arg
-  let language = get(g:, 'wiktionary_language', 'english')
-  let keys = get(g:, 'wiktionary_keys', 'definitions,pronunciations,etymology')
-  " Pass the arguments to Python
 python3 << EOF
 import sys
 from os.path import normpath, join
@@ -28,8 +22,14 @@ python_root_dir = normpath(join(plugin_root_dir, '..', 'python'))
 sys.path.insert(0, python_root_dir)
 # Works with local path
 import plugin
-# Your Python code here using language and keys
 EOF
+
+let g:vim_wiktionary_python_plugin_loaded = 1
+
+" add language, and comma separated keep keys arg
+
+function! Wiktionary()
+  python3 plugin.wiktionary_parse()
 endfunction
 
 command! -nargs=0 Wiktionary call Wiktionary()
