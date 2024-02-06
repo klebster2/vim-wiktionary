@@ -7,6 +7,12 @@ import subprocess
 import sys
 import typing as t
 
+# Change this if you want to use a different language
+DEFAULT_LANGUAGE = "english"
+
+# Change this if you want to include more / different keys
+DEFAULT_KEYS = "definitions,pronunciations,etymology"
+
 
 def install(package: str):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
@@ -33,25 +39,19 @@ except Exception as e:
     print("No vim module available outside vim")
     pass
 
-# Change this if you want to use a different language
-DEFAULT_LANGUAGE = "english"
 
-# Change this if you want to include more / different keys
-DEFAULT_KEYS = "definitions,pronunciations,etymology"
-
-
-def wiktionary_parse(
-    language: t.Optional[str] = DEFAULT_LANGUAGE, keep_keys: str = DEFAULT_KEYS
-) -> None:
+def wiktionary_parse() -> None:
     """
     Description
     -----------
     Return information to vim about the word definitions / etymologies / pronunciations
     """
-    parser = WiktionaryParser()
+    wiktionary_parser = WiktionaryParser()
     # TODO: fix this when the user wants to use a different language
-    parser.set_default_language(
-        language
+    wiktionary_parser.set_default_language(
+        vim.eval("a:language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
+        if vim.eval("a:language")  # type:ignore <= from function arg passing in plugin/wiktionary-vim.vim
+        else DEFAULT_LANGUAGE
     )
 
     cword = vim.eval("expand('<cword>')")  # type:ignore
@@ -59,15 +59,13 @@ def wiktionary_parse(
     cword = cword.strip()
     assert isinstance(cword, str)
 
-    word_wiktionary = parser.fetch(cword)
-
     word_wiktionary_new = []
-    for word in word_wiktionary:
+    for word in wiktionary_parser.fetch(cword):
         definitions = []
         word_new = {}
         # TODO: add more keys / parsing rules / options
         # and decide whether to limit the number of items returned
-        for key in keep_keys.split(","):
+        for key in vim.eval("a:keep_keys").split(","):  # type:ignore
 
             if key == "definitions":
                 for definition in word["definitions"]:
