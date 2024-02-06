@@ -6,21 +6,23 @@
 import subprocess
 import sys
 
+
 def install(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package, "yaml"])
+
 
 try:
     from wiktionaryparser import WiktionaryParser
 except:
     print("Trying to install package: wiktionaryparser")
-    install('wiktionaryparser')
+    install("wiktionaryparser")
     from wiktionaryparser import WiktionaryParser
 
 try:
     import yaml
 except:
     print("Trying to install package: yaml")
-    install('yaml')
+    install("yaml")
     import yaml
 
 try:
@@ -31,7 +33,8 @@ except Exception as e:
     pass
 
 # Change this if you want to use a different language
-DEFAULT_LANGUAGE="en"
+DEFAULT_LANGUAGE = "en"
+
 
 def wiktionary_parse():
     """
@@ -47,12 +50,14 @@ def wiktionary_parse():
     assert isinstance(cword, str)
 
     word_wiktionary = parser.fetch(cword)
-    #vim.command('echo "%s"' % ", ".join(args))
+    vim.command('echo "%s"' % ", ".join(cword))
 
     word_wiktionary_new = []
     for word in word_wiktionary:
         definitions = []
         word_new = {}
+        import json
+        vim.command(f'echo "{json.dumps(word)}"')
         for key in ("definitions", "pronunciations", "etymology"):
             if key == "definitions":
                 for definition in word["definitions"]:
@@ -67,7 +72,7 @@ def wiktionary_parse():
                         definition.update({"relatedWords": related_words_new})
                     definitions.append(definition)
                 word_new.update({"definitions": definitions})
-            #elif key == "pronunciations":
+            # elif key == "pronunciations":
             #    word_new.update({"pronunciations": word["pronunciations"]})
             elif key == "etymology":
                 word_new.update({"etymology": word["etymology"]})
@@ -87,22 +92,27 @@ def wiktionary_parse():
         .replace("\n\n", "\n")
         .replace("...", "…")
     )
-    vim.command("new")   # type: ignore
-    vim.command( # type: ignore
-        "setlocal wrap nonumber norelativenumber nolist wrap linebreak breakat&vim noswapfile bufhidden=hide buftype=nofile foldmethod=indent syntax=yaml"
-    )
-    word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit = \
+    #vim.command("new")  # type: ignore
+    #vim.command(  # type: ignore
+    #    "setlocal wrap nonumber norelativenumber nolist wrap linebreak breakat&vim noswapfile bufhidden=hide buftype=nofile foldmethod=indent syntax=yaml"
+    #)
+    vim.command('echo "%s"' % word_wiktionary_yaml_noquotes_nonl_clean)
+    word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit = (
         word_wiktionary_yaml_noquotes_nonl_clean.split("\n")
-    vim.current.buffer[:] = [  # type: ignore
-        l
-        for l in word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit
-        if isinstance(l, str)
-    ]
+    )
+    #vim.current.buffer[:] = [  # type: ignore
+    #    l
+    #    for l in word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit
+    #    if isinstance(l, str)
+    #]
+
     # TODO: use vim.eval("winwidth({nr})") to get window width,
 
     # and calculate number of lines
     # The below is a guestimate
-    vim.command(f"resize {len(word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit)+5}")
+    #vim.command(
+    #    f"resize {len(word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit)+5}"
+    #)
 
     # [
     #    self.nvim.command("echom '%s'" % line) for line in
