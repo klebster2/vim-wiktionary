@@ -93,22 +93,23 @@ def wiktionary_parse():
         .replace("\n\n", "\n")
         .replace("...", "…")
     )
-    vim.command("new")   # type: ignore
-    vim.command( # type: ignore
-        "setlocal wrap nonumber norelativenumber nolist wrap linebreak breakat&vim noswapfile bufhidden=hide buftype=nofile foldmethod=indent syntax=yaml"
-    )
-    word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit = \
-        word_wiktionary_yaml_noquotes_nonl_clean.split("\n")
-    vim.current.buffer[:] = [  # type: ignore
-        l
-        for l in word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit
-        if isinstance(l, str)
-    ]
+    print(word_wiktionary_yaml_noquotes_nonl_clean)
+    #vim.command("new")   # type: ignore
+    #vim.command( # type: ignore
+    #    "setlocal wrap nonumber norelativenumber nolist wrap linebreak breakat&vim noswapfile bufhidden=hide buftype=nofile foldmethod=indent syntax=yaml"
+    #)
+    #word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit = \
+    #    word_wiktionary_yaml_noquotes_nonl_clean.split("\n")
+    #vim.current.buffer[:] = [  # type: ignore
+    #    l
+    #    for l in word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit
+    #    if isinstance(l, str)
+    #]
     # TODO: use vim.eval("winwidth({nr})") to get window width,
 
     # and calculate number of lines
     # The below is a guestimate
-    vim.command(f"resize {len(word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit)+5}")
+    #vim.command(f"resize {len(word_wiktionary_yaml_noquotes_nonl_clean_newlinesplit)+5}")
 
     # [
     #    self.nvim.command("echom '%s'" % line) for line in
