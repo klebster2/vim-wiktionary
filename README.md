@@ -59,7 +59,6 @@ require("packer").startup(function()
       "klebster2/vim-wiktionary",
         config = function()
           vim.g.wiktionary_language = 'english'
-          vim.g.wiktionary_keep_keys = 'etymology,definitions'
         end
     }
 end)
